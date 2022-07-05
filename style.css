@@ -1,0 +1,299 @@
+html, body
+{
+    box-sizing: border-box;
+    margin: 0;
+    font-family: Cambria, serif;
+    width: 1536px;
+    height: 700px;
+}
+nav ul li
+{
+    display: inline-block;
+}
+header nav a
+{
+    text-decoration: none;
+    color: #7a2f2f;
+    font-weight: bold;
+    padding: 5px 20px;
+    font-size: 20px;
+}
+header nav a:hover
+{
+    color: #936969;
+}
+header nav
+{
+    margin-left: 60%;
+}
+header nav~div
+{
+    margin-left: 30px;
+    margin-top: -40px;
+    color: #5e7e2e;
+    font-size: 28px;
+    font-weight: bold;
+    font-style: oblique;
+
+}
+#intro
+{
+    background-image: url("img/image00003.jpeg");
+    background-repeat: no-repeat;
+    background-position: right;
+}
+#tea
+{
+    text-align: right;
+    padding-top:10%;
+    padding-right: 15% ;
+    font-size: 32px;
+    color:beige;
+}
+#tea~p
+{
+    text-align: right;
+    padding-right: 15%;
+    color: lightgoldenrodyellow;
+    font-size: 24px;
+    font-weight: bold;
+}
+#about
+{
+    background-image: url("img/Beatrix_Anja Kalin 137.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#about .container
+{
+    width: 900px;
+    margin:auto;
+    color:beige;
+}
+#cute1
+{
+    background-image: url("img/picture6.jpg");
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 600px;
+    background-size: contain;
+    position: relative;
+    float:left;
+}
+.par1 h3, .par1 p
+{
+    box-sizing: border-box;
+    position: relative;
+    float:right;
+    width: 50%;
+}
+.par1 p, .par2 p
+{
+    background-color: rgba(69, 112, 69, 0.54);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 18px;
+    margin-top: -10px;
+    color:beige;
+    text-align: justify;
+
+}
+#cute2
+{
+    background-image: url("img/picture3.jpg");
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 600px;
+    background-size: contain;
+    position: relative;
+    float:right;
+}
+.par2 p
+{
+    position: relative;
+    float:left;
+    box-sizing: border-box;
+    width: 50%;
+}
+.par2
+{
+    clear: both;
+}
+.par2 a
+{
+    color: #99ace8;
+    font-weight: bold;
+}
+.par1 h3, .par2 h3
+{
+    text-align: center;
+    font-size: 22px;
+}
+#dance
+{
+    background-image: url("img/Beatrix_Anja Kalin 111.jpg") ;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#dance .container
+{
+    width: 1350px;
+    margin: auto;
+}
+
+#pic1
+{
+    background-image: url("img/picture1.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 300px;
+    height: 400px;
+}
+#pic2
+{
+    background-image: url("img/picture2.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 300px;
+    height: 400px;
+}
+#dance header nav~div
+{
+    color:darkred;
+}
+#dance h1
+{
+    text-align: center;
+    color: #460505;
+}
+#dance h2
+{
+    color: #460505;
+    padding-left: 60px;
+}
+#content
+{
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    justify-content: center;
+    box-sizing: border-box;
+}
+#content p
+{
+    width: 25%;
+    text-align: justify;
+    margin: 0 10px;
+    padding: 5px;
+    font-size: 18px;
+    background-color: rgba(203, 137, 123, 0.49);
+    color: #250707;
+}
+#content a
+{
+    color: #041165;
+    font-weight: bold;
+}
+.video_container
+{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    align-content: space-evenly;
+    justify-items: center;
+    padding-left: 55px;
+}
+.video
+{
+    flex-grow: 5;
+}
+#contact
+{
+    background-image: url("img/Beatrix_Anja Kalin 9.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#contact header nav~div
+{
+    color: #033d03;
+}
+#contact .container p
+{
+    position: relative;
+    float: left;
+    font-size: 24px;
+    color: beige;
+    background-color: rgba(94, 126, 46, 0.7);
+    padding: 7px;
+    border-radius: 3px;
+    margin-top: 150px;
+    margin-left: 150px;
+}
+#contact .container a
+{
+    position: relative;
+    float:right;
+    color: #fff;
+    font-size: 38px;
+    font-weight: bold;
+    margin-right: 260px;
+    margin-top: 140px;
+    background-color: #012c01;
+    padding: 10px;
+    border-radius: 10px;
+}
+#contact .container a:hover
+{
+    color: #5e7e2e;
+}
+footer
+{
+    padding-left: 70%;
+}
+footer a
+{
+    color: transparent;
+    font-size: 22px;
+}
+footer a:hover
+{
+    opacity: 70%;
+}
+footer nav ul li:first-of-type a
+{
+    background-image: url("img/instaicon.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: right;
+    width: 20px;
+    height: 20px;
+}
+footer li:nth-of-type(2) a
+{
+    background-image: url("img/fbicon.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 20px;
+    height: 20px;
+}
+footer li:nth-of-type(3) a
+{
+    background-image: url("img/yticon.jpg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: left;
+    width: 20px;
+    height: 20px;
+}
+#intro footer
+{
+    margin-top: 180px;
+}
+#contact footer
+{
+    margin-top: 620px;
+}
