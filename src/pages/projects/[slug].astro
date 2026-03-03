@@ -1,0 +1,256 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { project: CollectionEntry<'projects'>; }
+
+// Astro 5: project.id includes extension ("portfolio-website.md").
+// Strip it for a clean URL and pass the full entry as a prop — no getEntry needed.
+export async function getStaticPaths() {
+  const projects = await getCollection('projects');
+  return projects.map((project) => ({
+    params: { slug: project.id.replace(/\.mdx?$/, '') },
+    props:  { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content } = await render(project); // Astro 5: standalone render()
+
+const statusConfig = {
+  ongoing:   { label: 'Ongoing',   color: '#6D1A2A' },
+  completed: { label: 'Completed', color: '#0D0D0D' },
+  archived:  { label: 'Archived',  color: '#888' },
+};
+const s = statusConfig[project.data.status];
+
+function formatDate(ym: string) {
+  const [year, month] = ym.split('-');
+  return new Date(Number(year), Number(month) - 1).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+  });
+}
+---
+
+<BaseLayout title={project.data.title} description={project.data.description}>
+  <Nav slot="nav" />
+
+  <article class="max-w-5xl mx-auto px-6 pt-16 pb-24">
+
+    <!-- Back -->
+    <a href="/projects" class="back-link">← All Projects</a>
+
+    <div class="grid sm:grid-cols-3 gap-16 items-start mt-12">
+
+      <!-- Main content -->
+      <div class="sm:col-span-2">
+        <h1 class="project-title">{project.data.title}</h1>
+        <p class="project-desc">{project.data.description}</p>
+        <div class="prose-content"><Content /></div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+
+        <div class="meta-block">
+          <p class="meta-label">Status</p>
+          <p class="meta-value" style={`color: ${s.color}; font-weight: 600;`}>
+            {s.label}
+          </p>
+        </div>
+
+        <div class="meta-block">
+          <p class="meta-label">Timeline</p>
+          <p class="meta-value">
+            {formatDate(project.data.startDate)}
+            {project.data.endDate ? ` — ${formatDate(project.data.endDate)}` : ' — Present'}
+          </p>
+        </div>
+
+        <div class="meta-block">
+          <p class="meta-label">Stack</p>
+          <div class="tag-row">
+            {project.data.stack.map((tech) => (
+              <span class="tag-stack">{tech}</span>
+            ))}
+          </div>
+        </div>
+
+        {project.data.tags.length > 0 && (
+          <div class="meta-block">
+            <p class="meta-label">Tags</p>
+            <div class="tag-row">
+              {project.data.tags.map((tag) => (
+                <span class="tag-cat">#{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div class="meta-block link-block">
+          {project.data.repoUrl && (
+            <a href={project.data.repoUrl} target="_blank" rel="noopener" class="ext-link">
+              GitHub Repository →
+            </a>
+          )}
+          {project.data.liveUrl && (
+            <a href={project.data.liveUrl} target="_blank" rel="noopener" class="ext-link">
+              Live Site →
+            </a>
+          )}
+        </div>
+
+      </aside>
+    </div>
+  </article>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  /* ── Back link ──────────────────────── */
+  .back-link {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--navy-light);
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+  .back-link:hover { color: var(--burgundy); }
+
+  /* ── Heading & desc ─────────────────── */
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #0D0D0D;
+    margin-bottom: 1.25rem;
+  }
+  .project-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444;
+    margin-bottom: 2.5rem;
+    max-width: 54ch;
+  }
+
+  /* ── Sidebar ────────────────────────── */
+  .sidebar {
+    border-left: 2px solid var(--burgundy);
+    padding-left: 1.75rem;
+    position: sticky;
+    top: 6rem;
+  }
+  .meta-block { margin-bottom: 2rem; }
+  .meta-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 0.5rem;
+  }
+  .meta-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #0D0D0D;
+  }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .tag-stack {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #0D0D0D;
+    border: 1px solid #D0D0D0;
+    padding: 0.2rem 0.5rem;
+  }
+  .tag-cat {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--burgundy);
+    background: var(--burgundy-pale);
+    padding: 0.2rem 0.6rem;
+  }
+  .link-block { display: flex; flex-direction: column; gap: 0.75rem; }
+  .ext-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #0D0D0D;
+    text-decoration: none;
+    border-bottom: 1px solid #0D0D0D;
+    padding-bottom: 1px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .ext-link:hover { color: var(--burgundy); border-color: var(--burgundy); }
+
+  /* ── Prose body ─────────────────────── */
+  .prose-content {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: #222;
+  }
+  .prose-content h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0D0D0D;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-content h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #0D0D0D;
+    margin-top: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  .prose-content p  { margin-bottom: 1.25rem; }
+  .prose-content ul { list-style: disc; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+  .prose-content ol { list-style: decimal; padding-left: 1.5rem; margin-bottom: 1.25rem; }
+  .prose-content li { margin-bottom: 0.4rem; }
+  .prose-content a  {
+    color: var(--burgundy);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 500;
+  }
+  .prose-content code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.83em;
+    background: #F2F2F2;
+    color: #0D0D0D;
+    padding: 0.15em 0.4em;
+    border-radius: 2px;
+  }
+  .prose-content pre {
+    background: #0D0D0D;
+    color: #F0EDE8;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+  .prose-content pre code { background: none; color: inherit; padding: 0; }
+  .prose-content blockquote {
+    border-left: 3px solid var(--burgundy);
+    padding-left: 1.25rem;
+    color: #555;
+    font-style: italic;
+    margin: 1.5rem 0;
+  }
+</style>

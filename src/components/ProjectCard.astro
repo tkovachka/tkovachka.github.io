@@ -1,0 +1,143 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  status: 'ongoing' | 'completed' | 'archived';
+  stack: string[];
+  slug: string;
+  featured?: boolean;
+}
+
+const { title, description, status, stack, slug, featured = false } = Astro.props;
+
+const statusDot = {
+  ongoing:   { symbol: '●', color: '#6D1A2A' },
+  completed: { symbol: '✓', color: '#0D0D0D' },
+  archived:  { symbol: '○', color: '#AAA' },
+};
+const st = statusDot[status];
+---
+
+<a href={`/projects/${slug}`} class="card-link">
+  <article class="card">
+
+    <div class="card-top">
+      <span class="card-status" style={`color: ${st.color}`}>
+        {st.symbol} {status}
+      </span>
+      {featured && <span class="card-featured">Featured</span>}
+    </div>
+
+    <h3 class="card-title">{title}</h3>
+    <p class="card-desc">{description}</p>
+
+    <div class="card-footer">
+      <div class="card-stack">
+        {stack.slice(0, 3).map((tech) => (
+          <span class="stack-tag">{tech}</span>
+        ))}
+        {stack.length > 3 && (
+          <span class="stack-more">+{stack.length - 3}</span>
+        )}
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+  </article>
+</a>
+
+<style>
+  .card-link { text-decoration: none; display: block; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #E8E8E8;
+    padding: 1.75rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .card-link:hover .card {
+    border-color: var(--burgundy);
+    box-shadow: 4px 4px 0 var(--burgundy-pale);
+  }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .card-status {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .card-featured {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: var(--burgundy);
+    padding: 0.2rem 0.55rem;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #0D0D0D;
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    transition: color 0.2s;
+  }
+  .card-link:hover .card-title { color: var(--burgundy); }
+
+  .card-desc {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #666;
+    margin-bottom: 1.5rem;
+    flex: 1;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+  }
+
+  .card-stack { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .stack-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #888;
+    background: #F4F4F4;
+    padding: 0.2rem 0.5rem;
+    border-radius: 2px;
+  }
+  .stack-more {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    color: var(--burgundy);
+    font-weight: 600;
+  }
+
+  .card-arrow {
+    font-size: 1.1rem;
+    color: #CCC;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .card-link:hover .card-arrow {
+    color: var(--burgundy);
+    transform: translateX(4px);
+  }
+</style>

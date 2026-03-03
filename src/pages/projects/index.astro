@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+
+const sorted = allProjects.sort((a, b) => {
+  const order = { ongoing: 0, completed: 1, archived: 2 };
+  const statusDiff = order[a.data.status] - order[b.data.status];
+  if (statusDiff !== 0) return statusDiff;
+  return b.data.startDate.localeCompare(a.data.startDate);
+});
+
+const ongoing   = sorted.filter((p) => p.data.status === 'ongoing');
+const completed = sorted.filter((p) => p.data.status === 'completed');
+const archived  = sorted.filter((p) => p.data.status === 'archived');
+
+// Astro 5: .id includes extension — strip it for clean URL
+const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
+---
+
+<BaseLayout title="Projects" description="All projects — ongoing and completed work.">
+  <Nav slot="nav" />
+
+  <div class="max-w-5xl mx-auto px-6 pt-20 pb-24">
+
+    <header class="page-header">
+      <p class="section-label">Work</p>
+      <h1 class="page-title">Projects</h1>
+      <p class="page-count">{allProjects.length} {allProjects.length === 1 ? 'project' : 'projects'}</p>
+    </header>
+
+    {ongoing.length > 0 && (
+      <section class="project-group">
+        <p class="group-label">● Ongoing</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {ongoing.map((p) => (
+            <ProjectCard
+              title={p.data.title}
+              description={p.data.description}
+              status={p.data.status}
+              stack={p.data.stack}
+              slug={cleanId(p.id)}
+              featured={p.data.featured}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {completed.length > 0 && (
+      <section class="project-group">
+        <p class="group-label">✓ Completed</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {completed.map((p) => (
+            <ProjectCard
+              title={p.data.title}
+              description={p.data.description}
+              status={p.data.status}
+              stack={p.data.stack}
+              slug={cleanId(p.id)}
+              featured={p.data.featured}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+    {archived.length > 0 && (
+      <section class="project-group">
+        <p class="group-label">○ Archived</p>
+        <div class="grid sm:grid-cols-2 gap-4">
+          {archived.map((p) => (
+            <ProjectCard
+              title={p.data.title}
+              description={p.data.description}
+              status={p.data.status}
+              stack={p.data.stack}
+              slug={cleanId(p.id)}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .page-header { margin-bottom: 3.5rem; }
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 0.75rem;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 700;
+    color: #0D0D0D;
+    line-height: 1.05;
+    margin-bottom: 0.5rem;
+  }
+  .page-count {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.5rem;
+  }
+  .project-group { margin-bottom: 3.5rem; }
+  .group-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 1.25rem;
+  }
+</style>

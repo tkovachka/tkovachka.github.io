@@ -1,0 +1,199 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout
+  title="About"
+  description="About Your Name — developer, background, and what I'm currently working on."
+>
+  <Nav slot="nav" />
+
+  <div class="max-w-5xl mx-auto px-6 pt-20 pb-24">
+
+    <header class="page-header">
+      <p class="section-label">About</p>
+      <h1 class="page-title">The longer<br /><em>version.</em></h1>
+    </header>
+
+    <div class="about-body">
+
+      <!-- Main bio -->
+      <div class="bio">
+        <p class="bio-lead">
+          Start with where you're from or how you got into software. This opening
+          paragraph sets the tone — keep it honest and personal.
+        </p>
+        <p class="bio-text">
+          Describe your path. Studies, early projects, first job, turning points.
+          What shaped you as a developer or as a person. This doesn't need to be
+          a CV — that's what LinkedIn is for. This should feel like a conversation.
+        </p>
+        <p class="bio-text">
+          What do you care about? What kinds of problems excite you? What are you
+          working towards? Leave this feeling alive and current — not a static summary.
+        </p>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Currently</p>
+          <ul class="sidebar-list">
+            {['Working at Company / on Project', 'Based in City, Country', 'Open to opportunities'].map((item) => (
+              <li class="sidebar-item">{item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Core Stack</p>
+          <ul class="sidebar-list mono">
+            {['TypeScript', 'React', 'Node.js', 'SQL', 'Git'].map((tech) => (
+              <li class="sidebar-item">{tech}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="sidebar-block">
+          <p class="sidebar-label">Links</p>
+          <ul class="sidebar-list">
+            {[
+              { label: 'GitHub',   href: 'https://github.com/yourusername' },
+              { label: 'LinkedIn', href: 'https://linkedin.com/in/yourprofile' },
+              { label: 'Email',    href: 'mailto:you@example.com' },
+            ].map(({ label, href }) => (
+              <li>
+                <a href={href} target={href.startsWith('http') ? '_blank' : undefined}
+                   rel="noopener" class="sidebar-link">
+                  {label} →
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+
+    <div class="page-footer-nav">
+      <a href="/projects" class="footer-cta">See my projects →</a>
+    </div>
+
+  </div>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  .page-header { margin-bottom: 4rem; }
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 0.75rem;
+  }
+  .page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    font-weight: 700;
+    color: #0D0D0D;
+    line-height: 1.05;
+  }
+  .page-title em { font-style: italic; color: var(--burgundy); }
+
+  .about-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: start;
+    margin-bottom: 4rem;
+  }
+  @media (max-width: 640px) {
+    .about-body { grid-template-columns: 1fr; gap: 3rem; }
+  }
+
+  /* Bio */
+  .bio-lead {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 500;
+    line-height: 1.75;
+    color: #0D0D0D;
+    margin-bottom: 1.5rem;
+  }
+  .bio-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.85;
+    color: #444;
+    margin-bottom: 1.25rem;
+  }
+
+  /* Sidebar */
+  .sidebar {
+    border-left: 3px solid var(--burgundy);
+    padding-left: 2rem;
+    position: sticky;
+    top: 5rem;
+  }
+  .sidebar-block { margin-bottom: 2.5rem; }
+  .sidebar-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 0.75rem;
+  }
+  .sidebar-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .sidebar-item {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    color: #333;
+  }
+  .sidebar-list.mono .sidebar-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+  }
+  .sidebar-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #333;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .sidebar-link:hover { color: var(--burgundy); }
+
+  .page-footer-nav {
+    border-top: 1px solid #E8E8E8;
+    padding-top: 2.5rem;
+  }
+  .footer-cta {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0D0D0D;
+    text-decoration: none;
+    border-bottom: 2px solid #0D0D0D;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .footer-cta:hover { color: var(--burgundy); border-color: var(--burgundy); }
+</style>

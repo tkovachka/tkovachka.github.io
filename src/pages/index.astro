@@ -1,0 +1,288 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { getCollection } from 'astro:content';
+
+const allProjects = await getCollection('projects');
+const featured = allProjects
+  .filter((p) => p.data.featured)
+  .sort((a, b) => b.data.startDate.localeCompare(a.data.startDate));
+
+const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
+---
+
+<BaseLayout title="Home" description="Developer portfolio of Your Name.">
+  <Nav slot="nav" />
+
+  <!-- ── Hero ──────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="hero-inner">
+
+      <p class="hero-label">Software Developer</p>
+
+      <h1 class="hero-name">
+        Your<br /><em>Name</em>
+      </h1>
+
+      <!-- Thick burgundy rule — the bold pop anchor -->
+      <div class="hero-rule"></div>
+
+      <p class="hero-bio">
+        I build thoughtful software and write about the craft.
+        Currently working on <strong>interesting things</strong>.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/projects" class="btn-primary">View Projects</a>
+        <a href="/about" class="btn-ghost">About Me →</a>
+      </div>
+    </div>
+
+    <!-- Large decorative number — background texture -->
+    <span class="hero-deco" aria-hidden="true">01</span>
+  </section>
+
+  <!-- ── Featured Work ─────────────────────────────────── -->
+  {featured.length > 0 && (
+    <section class="section-featured">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="section-header">
+          <div>
+            <p class="section-label">Selected Work</p>
+            <h2 class="section-title">Featured Projects</h2>
+          </div>
+          <a href="/projects" class="see-all">All projects →</a>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4">
+          {featured.map((project) => (
+            <ProjectCard
+              title={project.data.title}
+              description={project.data.description}
+              status={project.data.status}
+              stack={project.data.stack}
+              slug={cleanId(project.id)}
+              featured={project.data.featured}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- ── About strip ───────────────────────────────────── -->
+  <section class="about-strip">
+    <div class="max-w-5xl mx-auto px-6 about-grid">
+      <div class="about-left">
+        <p class="section-label">About</p>
+        <h2 class="section-title">A little<br /><em>about me</em></h2>
+      </div>
+      <div class="about-right">
+        <p class="about-text">
+          Write a short intro paragraph here. Where you're from,
+          what you work on, what drives you. Keep it human — this is the first
+          impression visitors will have of you beyond your name.
+        </p>
+        <a href="/about" class="about-link">Read more →</a>
+      </div>
+    </div>
+  </section>
+
+  <Footer slot="footer" />
+</BaseLayout>
+
+<style>
+  /* ── Hero ───────────────────────────────── */
+  .hero {
+    position: relative;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 5rem 1.5rem 6rem;
+    overflow: hidden;
+  }
+  .hero-inner { position: relative; z-index: 2; max-width: 42rem; }
+
+  .hero-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(4rem, 10vw, 7rem);
+    font-weight: 700;
+    line-height: 0.95;
+    color: #0D0D0D;
+    margin-bottom: 1.75rem;
+    letter-spacing: -0.02em;
+  }
+  .hero-name em {
+    font-style: italic;
+    color: var(--burgundy);
+  }
+
+  .hero-rule {
+    width: 4rem;
+    height: 4px;
+    background: var(--burgundy);
+    margin-bottom: 2rem;
+  }
+
+  .hero-bio {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #444;
+    max-width: 44ch;
+    margin-bottom: 2.5rem;
+  }
+  .hero-bio strong { color: #0D0D0D; font-weight: 600; }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: #0D0D0D;
+    color: var(--cream);
+    padding: 0.85rem 1.75rem;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .btn-primary:hover { background: var(--burgundy); }
+
+  .btn-ghost {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0D0D0D;
+    text-decoration: none;
+    border-bottom: 2px solid #0D0D0D;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--burgundy); border-color: var(--burgundy); }
+
+  /* Background decorative number */
+  .hero-deco {
+    position: absolute;
+    right: -1rem;
+    bottom: -2rem;
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(8rem, 20vw, 16rem);
+    font-weight: 700;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(109,26,42,0.08);
+    user-select: none;
+    line-height: 1;
+    z-index: 1;
+  }
+
+  /* ── Shared section styles ──────────── */
+  .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    color: #0D0D0D;
+    line-height: 1.15;
+  }
+  .section-title em {
+    font-style: italic;
+    color: var(--burgundy);
+  }
+
+  /* ── Featured ───────────────────────── */
+  .section-featured {
+    border-top: 1px solid #E8E8E8;
+    padding: 5rem 0;
+  }
+  .section-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .see-all {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .see-all:hover { color: var(--burgundy); }
+
+  /* ── About strip ────────────────────── */
+  .about-strip {
+    background: #F5F3F0;
+    border-top: 1px solid #E8E8E8;
+    padding: 5rem 0;
+  }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  @media (max-width: 640px) {
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+  .about-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1.5rem;
+    max-width: 48ch;
+  }
+  .about-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    text-decoration: none;
+    border-bottom: 2px solid var(--burgundy);
+    padding-bottom: 2px;
+    transition: opacity 0.2s;
+  }
+  .about-link:hover { opacity: 0.7; }
+
+  /* Page fade-in */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-inner { animation: fadeUp 0.5s ease both; }
+</style>

@@ -1,0 +1,54 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <p class="footer-copy">
+      © {year} Your Name. Built with
+      <a href="https://astro.build" target="_blank" rel="noopener" class="footer-link">Astro</a>.
+    </p>
+    <div class="footer-links">
+      <a href="https://github.com/yourusername" target="_blank" rel="noopener" class="footer-link">GitHub</a>
+      <a href="mailto:you@example.com" class="footer-link">Email</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid #E8E8E8;
+    margin-top: 5rem;
+    background: var(--cream);
+  }
+  .footer-inner {
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer-copy {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    color: #999;
+  }
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+  }
+  .footer-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #999;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-link:hover { color: var(--burgundy); }
+</style>
