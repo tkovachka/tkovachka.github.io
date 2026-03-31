@@ -1,13 +1,13 @@
 ---
 title: "Portfolio Website"
-description: "This very site — a minimal developer portfolio built with Astro, Tailwind CSS, and deployed on GitHub Pages."
+description: "This very site - a minimal developer portfolio built with Astro, Tailwind CSS, and deployed on GitHub Pages."
 status: "ongoing"
-startDate: "2024-11"
+startDate: "2026-02"
 stack: ["Astro", "Tailwind CSS", "TypeScript", "GitHub Actions"]
 tags: ["web", "personal", "open-source"]
 featured: true
-repoUrl: "https://github.com/yourusername/yourusername.github.io"
-liveUrl: "https://yourusername.github.io"
+repoUrl: "https://github.com/tkovachka/tkovachka.github.io"
+liveUrl: "https://tkovachka.github.io"
 ---
 
 ## Overview

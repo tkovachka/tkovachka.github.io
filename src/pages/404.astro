@@ -6,28 +6,108 @@ import Footer from '../components/Footer.astro';
 
 <BaseLayout title="404 — Page Not Found">
   <Nav slot="nav" />
-  <div class="max-w-5xl mx-auto px-6 py-40 text-center">
-    <p
-      class="text-xs uppercase tracking-widest mb-6"
-      style="font-family: 'JetBrains Mono', monospace; color: var(--burgundy);"
-    >
-      404
-    </p>
-    <h1
-      class="text-5xl font-light mb-6"
-      style="font-family: 'Cormorant Garamond', serif; color: var(--navy);"
-    >
-      Page not found.
-    </h1>
-    <a
-      href="/"
-      class="text-sm uppercase tracking-widest transition-colors"
-      style="font-family: 'Lora', serif; color: var(--navy-light);"
-      onmouseover="this.style.color='var(--burgundy)'"
-      onmouseout="this.style.color='var(--navy-light)'"
-    >
-      ← Go home
-    </a>
+
+  <div class="container">
+    <div class="deco" aria-hidden="true">404</div>
+
+    <div class="content">
+      <p class="label">404</p>
+      <h1 class="title">Page not<br /><em>found.</em></h1>
+      <div class="rule"></div>
+      <p class="sub">The page you're looking for doesn't exist or was moved.</p>
+      <a href="/" class="home-link">← Go home</a>
+    </div>
   </div>
+
   <Footer slot="footer" />
 </BaseLayout>
+
+<style>
+  .container {
+    position: relative;
+    max-width: 72rem;
+    margin: 0 auto;
+    padding: 7rem 1.5rem 8rem;
+    overflow: hidden;
+  }
+
+  /*
+    Ghost numbers: visible but not competing.
+  */
+  .deco {
+    position: absolute;
+    right: -2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(10rem, 28vw, 22rem);
+    font-weight: 700;
+    color: rgba(109, 26, 42, 0.10);
+    user-select: none;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .content {
+    position: relative;
+    z-index: 2;
+    max-width: 38rem;
+  }
+
+  .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--burgundy);
+    margin-bottom: 1.25rem;
+  }
+
+  .title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3.5rem, 9vw, 6rem);
+    font-weight: 700;
+    line-height: 1.0;
+    color: #0D0D0D;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.75rem;
+  }
+  .title em {
+    font-style: italic;
+    color: var(--burgundy);
+  }
+
+  .rule {
+    width: 3rem;
+    height: 4px;
+    background: var(--burgundy);
+    margin-bottom: 1.75rem;
+  }
+
+  .sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: #666;
+    margin-bottom: 2.5rem;
+    max-width: 36ch;
+  }
+
+  .home-link {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #0D0D0D;
+    text-decoration: none;
+    border-bottom: 2px solid #0D0D0D;
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .home-link:hover {
+    color: var(--burgundy);
+    border-color: var(--burgundy);
+  }
+</style>

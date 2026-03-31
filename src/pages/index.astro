@@ -13,22 +13,21 @@ const featured = allProjects
 const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
 ---
 
-<BaseLayout title="Home" description="Developer portfolio of Your Name.">
+<BaseLayout title="Home" description="Software Engineer portfolio of Teodora Kovachka.">
   <Nav slot="nav" />
 
   <!-- ── Hero ──────────────────────────────────────────── -->
   <section class="hero">
     <div class="hero-inner">
 
-      <p class="hero-label">Software Developer</p>
+      <p class="hero-label">Software Engineer, AI enthusiast, Relentless Experimenter</p>
 
       <h1 class="hero-name">
-        Your<br /><em>Name</em>
+        Teodora<br /><em>Kovachka</em>
       </h1>
 
-      <!-- Thick burgundy rule — the bold pop anchor -->
       <div class="hero-rule"></div>
-
+      <!-- todo personalize -->
       <p class="hero-bio">
         I build thoughtful software and write about the craft.
         Currently working on <strong>interesting things</strong>.
@@ -39,9 +38,23 @@ const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
         <a href="/about" class="btn-ghost">About Me →</a>
       </div>
     </div>
+    <div class="hero-photo-wrap" id="photo-wrap">
+      <img
+          src="/src/public/images/profile.jpg"
+          alt="Teodora Kovachka"
+          class="hero-photo"
+          width="420"
+          height="560"
+          loading="lazy"
+          decoding="async"
+          onload="this.closest('.hero-photo-wrap').classList.add('loaded')"
+      />
+      <script>
+        const img = document.querySelector('.hero-photo');
+        if (img?.complete) img.closest('.hero-photo-wrap')?.classList.add('loaded');
+      </script>
+    </div>
 
-    <!-- Large decorative number — background texture -->
-    <span class="hero-deco" aria-hidden="true">01</span>
   </section>
 
   <!-- ── Featured Work ─────────────────────────────────── -->
@@ -100,8 +113,16 @@ const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
     max-width: 72rem;
     margin: 0 auto;
     padding: 5rem 1.5rem 6rem;
-    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: center;
   }
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-photo-wrap { display: none; }
+  }
+
   .hero-inner { position: relative; z-index: 2; max-width: 42rem; }
 
   .hero-label {
@@ -180,19 +201,58 @@ const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
   }
   .btn-ghost:hover { color: var(--burgundy); border-color: var(--burgundy); }
 
-  /* Background decorative number */
-  .hero-deco {
+  /* ── Photo frame ─────────────────────── */
+  .hero-photo-wrap {
+    position: relative;
+    flex-shrink: 0;
+    width: 300px;
+    height: 400px;
+  }
+
+  .hero-photo-wrap::before {
+    content: '';
     position: absolute;
-    right: -1rem;
-    bottom: -2rem;
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(8rem, 20vw, 16rem);
-    font-weight: 700;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(109,26,42,0.08);
-    user-select: none;
-    line-height: 1;
+    inset: 0;
+    border: 2px solid var(--burgundy);
+    transform: translate(12px, 12px);
+    z-index: 0;
+  }
+
+  .hero-photo-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: linear-gradient(
+        135deg,
+        #F0ECEB 0%,
+        #FAF8F5 50%,
+        #F0ECEB 100%
+    );
+    background-size: 200% 200%;
+    animation: shimmer 1.6s ease-in-out infinite;
+    transition: opacity 0.3s ease;
+  }
+
+  .hero-photo-wrap.loaded::after {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes shimmer {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .hero-photo {
+    display: block;
+    position: relative;
     z-index: 1;
+    width: 300px;
+    height: 400px;
+    object-fit: cover;
+    object-position: center top;
   }
 
   /* ── Shared section styles ──────────── */

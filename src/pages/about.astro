@@ -2,198 +2,431 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+
+// ─── Customize your agenda here ───────────────────────────────────────────────
+// Each entry maps a display label to the id of its <section> below.
+const agenda = [
+    { label: 'The Beginning',   id: 'beginning'   },
+    { label: 'AI & Me',         id: 'ai'           },
+    { label: 'Going Deeper',    id: 'deeper'       },
+    { label: 'How I Work',      id: 'how-i-work'   },
+    { label: 'What Drives Me',  id: 'drives-me'    },
+];
+
+const stack = [
+    'React', 'Astro', 'Node.js', 'Express', 'Tailwind CSS', 'Next.js',
+    'FastAPI', 'Flask', 'Spring Boot', 'ASP.NET',
+];
+
+const aiStack = [
+    'Prompt Engineering', 'Context Engineering', 'LLM APIs', 'AI Agents', 'RAG',
+    'scikit-learn', 'pandas', 'NumPy', 'Jupyter', 'Hugging Face',
+];
+
+const tooling = [
+    'Git', 'GitHub Actions', 'Docker', 'GitHub Pages', 'VS Code', 'WebStorm',
+    'Postman', 'Figma', 'REST APIs', 'CI/CD', 'Static Site Generation',
+    'Agile', 'Software Architecture', 'Data Modelling', 'Automation', 'Web Performance',
+];
 ---
 
 <BaseLayout
-  title="About"
-  description="About Your Name — developer, background, and what I'm currently working on."
+        title="About"
+        description="About Teodora Kovachka - background and what I'm currently working on."
 >
-  <Nav slot="nav" />
+    <Nav slot="nav" />
 
-  <div class="max-w-5xl mx-auto px-6 pt-20 pb-24">
+    <div class="max-w-5xl mx-auto px-6 pt-20 pb-24">
 
-    <header class="page-header">
-      <p class="section-label">About</p>
-      <h1 class="page-title">The longer<br /><em>version.</em></h1>
-    </header>
+        <!-- Page header -->
+        <header class="page-header">
+            <div class="header-grid">
+                <div class="header-left">
+                    <p class="section-label">About</p>
+                    <h1 class="page-title">The longer<br /><em>version.</em></h1>
+                </div>
 
-    <div class="about-body">
+                <nav class="agenda" aria-label="Page sections">
+                    {agenda.map((item, i) => (
+                            <a href={`#${item.id}`} class="agenda-item">
+                                <span class="agenda-index">{String(i + 1).padStart(2, '0')}</span>
+                                <span class="agenda-label">{item.label}</span>
+                            </a>
+                    ))}
+                </nav>
+            </div>
+        </header>
 
-      <!-- Main bio -->
-      <div class="bio">
-        <p class="bio-lead">
-          Start with where you're from or how you got into software. This opening
-          paragraph sets the tone — keep it honest and personal.
-        </p>
-        <p class="bio-text">
-          Describe your path. Studies, early projects, first job, turning points.
-          What shaped you as a developer or as a person. This doesn't need to be
-          a CV — that's what LinkedIn is for. This should feel like a conversation.
-        </p>
-        <p class="bio-text">
-          What do you care about? What kinds of problems excite you? What are you
-          working towards? Leave this feeling alive and current — not a static summary.
-        </p>
-      </div>
+        <!-- Body: 2/3 main + 1/3 sidebar, matching [slug].astro -->
+        <div class="about-body">
 
-      <!-- Sidebar -->
-      <aside class="sidebar">
+            <!-- ── Main content ─────────────────────────────── -->
+            <div class="bio">
 
-        <div class="sidebar-block">
-          <p class="sidebar-label">Currently</p>
-          <ul class="sidebar-list">
-            {['Working at Company / on Project', 'Based in City, Country', 'Open to opportunities'].map((item) => (
-              <li class="sidebar-item">{item}</li>
-            ))}
-          </ul>
+                <section id="beginning" class="bio-section">
+                    <p class="bio-section-label">01 — The Beginning</p>
+                    <h2 class="bio-section-title">Where I started</h2>
+                    <p class="bio-lead">
+                        I graduated in December 2025 with a BSc in Information Science (Software Engineering
+                        and Information Technologies) — and walked straight into the most interesting time
+                        to be a developer.
+                    </p>
+                </section>
+
+                <section id="ai" class="bio-section">
+                    <p class="bio-section-label">02 — AI & Me</p>
+                    <h2 class="bio-section-title">Learning to trust the machine</h2>
+                    <p class="bio-text">
+                        Early on I noticed something that changed how I think about building software: AI can
+                        produce in minutes what used to take me months. At first, I felt threatened by it —
+                        it took me some time to start leaning in, to start "trusting" it. But then I started
+                        treating AI as a collaborator, as a colleague who actually knows more than me. Once I accepted the fact
+                        that AI will always be better than me at certain things, I actually started having fun with it. Now, AI handles
+                        the grunt work so I get to spend my time on the parts I actually love: exploring new
+                        ideas, researching, and making the decisions that actually matter.
+                    </p>
+                </section>
+
+                <section id="deeper" class="bio-section">
+                    <p class="bio-section-label">03 — Going Deeper</p>
+                    <h2 class="bio-section-title">Under the hood of LLMs</h2>
+                    <p class="bio-text">
+                        This newfound freedom gave me space to dig deeper into data science and machine learning —
+                        not because I wanted to become an ML engineer, but because I wanted to understand what was under the hood.
+                        How these models are built, what they are at their core, where they're strong and where
+                        they quietly hallucinate. That understanding slowly crystallized into a deep interest in
+                        LLMs specifically: context engineering, prompt engineering, and what happens when you
+                        wire a simple API call to a language model into an otherwise ordinary project.
+                    </p>
+                </section>
+
+                <section id="how-i-work" class="bio-section">
+                    <p class="bio-section-label">04 — How I Work</p>
+                    <h2 class="bio-section-title">Experimenting at speed</h2>
+                    <p class="bio-text">
+                        I'm currently in the highs of experimenting. I pick up projects in technologies I've
+                        barely touched before — this website is a good example, built in Astro with no prior
+                        Astro experience — because I've learned to rely on AI agents and structured workflows
+                        to fill the gaps. It works out. What I care about is the exploration itself: the
+                        research phase, the architectural decisions, the moment a new technology clicks.
+                    </p>
+                </section>
+
+                <section id="drives-me" class="bio-section">
+                    <p class="bio-section-label">05 — What Drives Me</p>
+                    <h2 class="bio-section-title">Automation as a philosophy</h2>
+                    <p class="bio-text">
+                        The through-line in everything I build is automation. I'm genuinely passionate about
+                        designing systems that remove friction — not just for users, but for myself. If a task
+                        is repetitive, I want a process for it. If a decision is routine, I want a model
+                        handling it. That philosophy shapes how I write code, how I run my projects, and how I
+                        think about what software is for.
+                    </p>
+                    <p class="bio-text">
+                        At the end of the day — I'm still figuring out where all of this leads — and I think
+                        that's exactly the right place to be right now.
+                    </p>
+                </section>
+
+            </div>
+
+            <!-- ── Sidebar ─────────────────────────────────── -->
+            <aside class="sidebar">
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">Currently</p>
+                    <ul class="sidebar-list">
+                        {['Working at PwC', 'Based in Skopje, Macedonia', 'Open to side-hustle ideas'].map((item) => (
+                                <li class="sidebar-item">{item}</li>
+                        ))}
+                    </ul>
+                </div>
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">Web Stack</p>
+                    <div class="tag-row">
+                        {stack.map((tech) => <span class="tag-stack">{tech}</span>)}
+                    </div>
+                </div>
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">AI / ML</p>
+                    <div class="tag-row">
+                        {aiStack.map((tech) => <span class="tag-stack">{tech}</span>)}
+                    </div>
+                </div>
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">Tooling & Practices</p>
+                    <div class="tag-row">
+                        {tooling.map((tech) => <span class="tag-stack">{tech}</span>)}
+                    </div>
+                </div>
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">Links</p>
+                    <div class="link-col">
+                        {[
+                            { label: 'GitHub',   href: 'https://github.com/tkovachka' },
+                            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/teodora-kovachka-37692134b' },
+                            { label: 'Email',    href: 'mailto:teodora.kovachka@gmail.com' },
+                        ].map(({ label, href }) => (
+                                <a href={href} target={href.startsWith('http') ? '_blank' : undefined}
+                                   rel="noopener" class="ext-link">
+                                    {label} →
+                                </a>
+                        ))}
+                    </div>
+                </div>
+
+            </aside>
         </div>
 
-        <div class="sidebar-block">
-          <p class="sidebar-label">Core Stack</p>
-          <ul class="sidebar-list mono">
-            {['TypeScript', 'React', 'Node.js', 'SQL', 'Git'].map((tech) => (
-              <li class="sidebar-item">{tech}</li>
-            ))}
-          </ul>
+        <div class="page-footer-nav">
+            <a href="/projects" class="footer-cta">See my projects →</a>
         </div>
 
-        <div class="sidebar-block">
-          <p class="sidebar-label">Links</p>
-          <ul class="sidebar-list">
-            {[
-              { label: 'GitHub',   href: 'https://github.com/yourusername' },
-              { label: 'LinkedIn', href: 'https://linkedin.com/in/yourprofile' },
-              { label: 'Email',    href: 'mailto:you@example.com' },
-            ].map(({ label, href }) => (
-              <li>
-                <a href={href} target={href.startsWith('http') ? '_blank' : undefined}
-                   rel="noopener" class="sidebar-link">
-                  {label} →
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-      </aside>
     </div>
 
-    <div class="page-footer-nav">
-      <a href="/projects" class="footer-cta">See my projects →</a>
-    </div>
-
-  </div>
-
-  <Footer slot="footer" />
+    <Footer slot="footer" />
 </BaseLayout>
 
 <style>
-  .page-header { margin-bottom: 4rem; }
-  .section-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--burgundy);
-    margin-bottom: 0.75rem;
-  }
-  .page-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 6vw, 4.5rem);
-    font-weight: 700;
-    color: #0D0D0D;
-    line-height: 1.05;
-  }
-  .page-title em { font-style: italic; color: var(--burgundy); }
+    /* ── Page header ─────────────────────── */
+    .page-header { margin-bottom: 4rem; }
 
-  .about-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 5rem;
-    align-items: start;
-    margin-bottom: 4rem;
-  }
-  @media (max-width: 640px) {
-    .about-body { grid-template-columns: 1fr; gap: 3rem; }
-  }
+    .header-grid {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 4rem;
+        align-items: start;
+        padding-bottom: 2rem;
+        border-bottom: 1px solid #E8E8E8;
+    }
+    @media (max-width: 640px) {
+        .header-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
 
-  /* Bio */
-  .bio-lead {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 500;
-    line-height: 1.75;
-    color: #0D0D0D;
-    margin-bottom: 1.5rem;
-  }
-  .bio-text {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 1rem;
-    line-height: 1.85;
-    color: #444;
-    margin-bottom: 1.25rem;
-  }
+    .header-left { flex-shrink: 0; }
 
-  /* Sidebar */
-  .sidebar {
-    border-left: 3px solid var(--burgundy);
-    padding-left: 2rem;
-    position: sticky;
-    top: 5rem;
-  }
-  .sidebar-block { margin-bottom: 2.5rem; }
-  .sidebar-label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--burgundy);
-    margin-bottom: 0.75rem;
-  }
-  .sidebar-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
-  }
-  .sidebar-item {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    color: #333;
-  }
-  .sidebar-list.mono .sidebar-item {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-  }
-  .sidebar-link {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-  .sidebar-link:hover { color: var(--burgundy); }
+    .section-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--burgundy);
+        margin-bottom: 0.75rem;
+    }
 
-  .page-footer-nav {
-    border-top: 1px solid #E8E8E8;
-    padding-top: 2.5rem;
-  }
-  .footer-cta {
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #0D0D0D;
-    text-decoration: none;
-    border-bottom: 2px solid #0D0D0D;
-    padding-bottom: 2px;
-    transition: color 0.2s, border-color 0.2s;
-  }
-  .footer-cta:hover { color: var(--burgundy); border-color: var(--burgundy); }
+    .page-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(3rem, 6vw, 4.5rem);
+        font-weight: 700;
+        color: #0D0D0D;
+        line-height: 1.05;
+        margin: 0;
+        white-space: nowrap;
+    }
+    .page-title em { font-style: italic; color: var(--burgundy); }
+
+    /* ── Agenda ──────────────────────────── */
+    .agenda {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0.45rem 2rem;
+        height: 12rem;
+        align-content: start;
+        padding-top: 1.85rem;
+    }
+    @media (max-width: 640px) {
+        .agenda {
+            height: auto;
+            flex-wrap: wrap;
+            flex-direction: row;
+            padding-top: 0;
+        }
+    }
+
+    .agenda-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        padding: 0.35rem 0.85rem 0.35rem 0.6rem;
+        border: 1px solid #E0E0E0;
+        transition: border-color 0.2s, background 0.2s;
+        width: fit-content;
+    }
+    .agenda-item:hover {
+        border-color: var(--burgundy);
+        background: var(--burgundy-pale);
+    }
+    .agenda-item:hover .agenda-index,
+    .agenda-item:hover .agenda-label { color: var(--burgundy); }
+
+    .agenda-index {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.6rem;
+        color: #BBB;
+        transition: color 0.2s;
+    }
+
+    .agenda-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #555;
+        transition: color 0.2s;
+    }
+
+    /* ── Body grid — 2/3 + 1/3, matching [slug].astro ── */
+    .about-body {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 4rem;
+        align-items: start;
+        margin-bottom: 4rem;
+    }
+    @media (max-width: 768px) {
+        .about-body { grid-template-columns: 1fr; gap: 3rem; }
+    }
+
+    /* ── Bio sections ────────────────────── */
+    .bio-section {
+        margin-bottom: 3.5rem;
+        padding-top: 1rem;
+        /* offset for sticky nav when scrolling to anchor */
+        scroll-margin-top: 6rem;
+    }
+    .bio-section:last-child { margin-bottom: 0; }
+
+    .bio-section-label {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.62rem;
+        color: var(--burgundy);
+        letter-spacing: 0.1em;
+        margin-bottom: 0.4rem;
+    }
+
+    .bio-section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+        font-weight: 700;
+        color: #0D0D0D;
+        line-height: 1.2;
+        margin-bottom: 1.1rem;
+    }
+
+    .bio-lead {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1.1rem;
+        font-weight: 500;
+        line-height: 1.75;
+        color: #0D0D0D;
+        margin-bottom: 1.25rem;
+    }
+
+    .bio-text {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1rem;
+        line-height: 1.85;
+        color: #444;
+        margin-bottom: 1.1rem;
+    }
+    .bio-text:last-child { margin-bottom: 0; }
+
+    /* ── Sidebar — matches [slug].astro exactly ── */
+    .sidebar {
+        border-left: 2px solid var(--burgundy);
+        padding-left: 1.75rem;
+        position: sticky;
+        top: 6rem;
+    }
+
+    .sidebar-block { margin-bottom: 2rem; }
+
+    .sidebar-label {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--burgundy);
+        margin-bottom: 0.6rem;
+    }
+
+    .sidebar-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+
+    .sidebar-item {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.9rem;
+        color: #333;
+    }
+
+    /* ── Tags — identical to ProjectCard / [slug].astro ── */
+    .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .tag-stack {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: #0D0D0D;
+        border: 1px solid #D0D0D0;
+        padding: 0.2rem 0.5rem;
+    }
+
+    /* ── Links ───────────────────────────── */
+    .link-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .ext-link {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: #0D0D0D;
+        text-decoration: none;
+        border-bottom: 1px solid #0D0D0D;
+        padding-bottom: 1px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .ext-link:hover { color: var(--burgundy); border-color: var(--burgundy); }
+
+    /* ── Footer nav ──────────────────────── */
+    .page-footer-nav {
+        border-top: 1px solid #E8E8E8;
+        padding-top: 2.5rem;
+    }
+
+    .footer-cta {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 0.8rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: #0D0D0D;
+        text-decoration: none;
+        border-bottom: 2px solid #0D0D0D;
+        padding-bottom: 2px;
+        transition: color 0.2s, border-color 0.2s;
+    }
+    .footer-cta:hover { color: var(--burgundy); border-color: var(--burgundy); }
 </style>
