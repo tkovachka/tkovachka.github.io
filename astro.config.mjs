@@ -2,8 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  // ⚠️ Replace with your actual GitHub Pages URL
-  site: 'https://yourusername.github.io',
+  site: 'https://tkovachka.github.io',
 
   integrations: [tailwind()],
 
