@@ -2,135 +2,84 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
+import {getCollection, render} from 'astro:content';
 
-// ─── Customize your agenda here ───────────────────────────────────────────────
-// Each entry maps a display label to the id of its <section> below.
-const agenda = [
-    { label: 'The Beginning',   id: 'beginning'   },
-    { label: 'AI & Me',         id: 'ai'           },
-    { label: 'Going Deeper',    id: 'deeper'       },
-    { label: 'How I Work',      id: 'how-i-work'   },
-    { label: 'What Drives Me',  id: 'drives-me'    },
-];
+const rawSections = await getCollection('about');
+
+const sections = rawSections.sort((a, b) => a.data.order - b.data.order);
+
+const rendered = await Promise.all(
+    sections.map(async (s) => {
+        const {Content} = await render(s);
+        return {section: s, Content};
+    })
+);
+
+const toId = (id: string) => id.replace(/\.mdx?$/, '');
 
 const stack = [
-    'React', 'Astro', 'Node.js', 'Express', 'Tailwind CSS', 'Next.js',
-    'FastAPI', 'Flask', 'Spring Boot', 'ASP.NET',
+    'React', 'Astro', 'Tailwind CSS', 'Node.js', 'FastAPI', 'Spring Boot', 'ASP.NET', 'Streamlit', 'Flutter', 'Dart',
+    'Android Studio', 'JavaScript', 'Java', 'Thymeleaf', 'Python', 'Django'
 ];
-
 const aiStack = [
     'Prompt Engineering', 'Context Engineering', 'LLM APIs', 'AI Agents', 'RAG',
-    'scikit-learn', 'pandas', 'NumPy', 'Jupyter', 'Hugging Face',
+    'langchain', 'scikit-learn', 'pandas', 'NumPy', 'Jupyter', 'Hugging Face',
 ];
-
+const cloudStack = [
+    'Azure App Service', 'Azure Functions', 'Azure SQL Database', 'Azure Blob Storage', 'Azure Cosmos DB',
+    'Azure Key Vault', 'Azure API Management', 'Azure Application Insights',
+];
 const tooling = [
     'Git', 'GitHub Actions', 'Docker', 'GitHub Pages', 'VS Code', 'WebStorm',
     'Postman', 'Figma', 'REST APIs', 'CI/CD', 'Static Site Generation',
-    'Agile', 'Software Architecture', 'Data Modelling', 'Automation', 'Web Performance',
+    'Agile', 'Software Architecture', 'Data Modelling', 'Automation'
 ];
 ---
 
 <BaseLayout
         title="About"
-        description="About Teodora Kovachka - background and what I'm currently working on."
->
-    <Nav slot="nav" />
+        description="About me - background and what I'm currently working on.">
+
+    <Nav slot="nav"/>
 
     <div class="max-w-5xl mx-auto px-6 pt-20 pb-24">
 
-        <!-- Page header -->
         <header class="page-header">
             <div class="header-grid">
                 <div class="header-left">
                     <p class="section-label">About</p>
-                    <h1 class="page-title">The longer<br /><em>version.</em></h1>
+                    <h1 class="page-title">The longer<br/><em>version.</em></h1>
                 </div>
 
                 <nav class="agenda" aria-label="Page sections">
-                    {agenda.map((item, i) => (
-                            <a href={`#${item.id}`} class="agenda-item">
+                    {rendered.map(({section}, i) => (
+                            <a href={`#${toId(section.id)}`} class="agenda-item">
                                 <span class="agenda-index">{String(i + 1).padStart(2, '0')}</span>
-                                <span class="agenda-label">{item.label}</span>
+                                <span class="agenda-label">{section.data.agendaLabel}</span>
                             </a>
                     ))}
                 </nav>
             </div>
         </header>
 
-        <!-- Body: 2/3 main + 1/3 sidebar, matching [slug].astro -->
         <div class="about-body">
 
-            <!-- ── Main content ─────────────────────────────── -->
+            <!-- ── Main content ─────────────────────────── -->
             <div class="bio">
-
-                <section id="beginning" class="bio-section">
-                    <p class="bio-section-label">01 — The Beginning</p>
-                    <h2 class="bio-section-title">Where I started</h2>
-                    <p class="bio-lead">
-                        I graduated in December 2025 with a BSc in Information Science (Software Engineering
-                        and Information Technologies) — and walked straight into the most interesting time
-                        to be a developer.
-                    </p>
-                </section>
-
-                <section id="ai" class="bio-section">
-                    <p class="bio-section-label">02 — AI & Me</p>
-                    <h2 class="bio-section-title">Learning to trust the machine</h2>
-                    <p class="bio-text">
-                        Early on I noticed something that changed how I think about building software: AI can
-                        produce in minutes what used to take me months. At first, I felt threatened by it —
-                        it took me some time to start leaning in, to start "trusting" it. But then I started
-                        treating AI as a collaborator, as a colleague who actually knows more than me. Once I accepted the fact
-                        that AI will always be better than me at certain things, I actually started having fun with it. Now, AI handles
-                        the grunt work so I get to spend my time on the parts I actually love: exploring new
-                        ideas, researching, and making the decisions that actually matter.
-                    </p>
-                </section>
-
-                <section id="deeper" class="bio-section">
-                    <p class="bio-section-label">03 — Going Deeper</p>
-                    <h2 class="bio-section-title">Under the hood of LLMs</h2>
-                    <p class="bio-text">
-                        This newfound freedom gave me space to dig deeper into data science and machine learning —
-                        not because I wanted to become an ML engineer, but because I wanted to understand what was under the hood.
-                        How these models are built, what they are at their core, where they're strong and where
-                        they quietly hallucinate. That understanding slowly crystallized into a deep interest in
-                        LLMs specifically: context engineering, prompt engineering, and what happens when you
-                        wire a simple API call to a language model into an otherwise ordinary project.
-                    </p>
-                </section>
-
-                <section id="how-i-work" class="bio-section">
-                    <p class="bio-section-label">04 — How I Work</p>
-                    <h2 class="bio-section-title">Experimenting at speed</h2>
-                    <p class="bio-text">
-                        I'm currently in the highs of experimenting. I pick up projects in technologies I've
-                        barely touched before — this website is a good example, built in Astro with no prior
-                        Astro experience — because I've learned to rely on AI agents and structured workflows
-                        to fill the gaps. It works out. What I care about is the exploration itself: the
-                        research phase, the architectural decisions, the moment a new technology clicks.
-                    </p>
-                </section>
-
-                <section id="drives-me" class="bio-section">
-                    <p class="bio-section-label">05 — What Drives Me</p>
-                    <h2 class="bio-section-title">Automation as a philosophy</h2>
-                    <p class="bio-text">
-                        The through-line in everything I build is automation. I'm genuinely passionate about
-                        designing systems that remove friction — not just for users, but for myself. If a task
-                        is repetitive, I want a process for it. If a decision is routine, I want a model
-                        handling it. That philosophy shapes how I write code, how I run my projects, and how I
-                        think about what software is for.
-                    </p>
-                    <p class="bio-text">
-                        At the end of the day — I'm still figuring out where all of this leads — and I think
-                        that's exactly the right place to be right now.
-                    </p>
-                </section>
-
+                {rendered.map(({section, Content}) => (
+                        <section id={toId(section.id)} class="bio-section">
+                            {section.data.subtitle && (
+                                    <p class="bio-section-label">{section.data.subtitle}</p>
+                            )}
+                            <h2 class="bio-section-title">{section.data.sectionTitle}</h2>
+                            <div class="bio-prose">
+                                <Content/>
+                            </div>
+                        </section>
+                ))}
             </div>
 
-            <!-- ── Sidebar ─────────────────────────────────── -->
+            <!-- ── Sidebar ─────────────────────────────── -->
             <aside class="sidebar">
 
                 <div class="sidebar-block">
@@ -143,7 +92,7 @@ const tooling = [
                 </div>
 
                 <div class="sidebar-block">
-                    <p class="sidebar-label">Web Stack</p>
+                    <p class="sidebar-label">Engineering Stack</p>
                     <div class="tag-row">
                         {stack.map((tech) => <span class="tag-stack">{tech}</span>)}
                     </div>
@@ -153,6 +102,13 @@ const tooling = [
                     <p class="sidebar-label">AI / ML</p>
                     <div class="tag-row">
                         {aiStack.map((tech) => <span class="tag-stack">{tech}</span>)}
+                    </div>
+                </div>
+
+                <div class="sidebar-block">
+                    <p class="sidebar-label">Cloud Engineering</p>
+                    <div class="tag-row">
+                        {cloudStack.map((tech) => <span class="tag-stack">{tech}</span>)}
                     </div>
                 </div>
 
@@ -167,12 +123,14 @@ const tooling = [
                     <p class="sidebar-label">Links</p>
                     <div class="link-col">
                         {[
-                            { label: 'GitHub',   href: 'https://github.com/tkovachka' },
-                            { label: 'LinkedIn', href: 'https://www.linkedin.com/in/teodora-kovachka-37692134b' },
-                            { label: 'Email',    href: 'mailto:teodora.kovachka@gmail.com' },
-                        ].map(({ label, href }) => (
-                                <a href={href} target={href.startsWith('http') ? '_blank' : undefined}
-                                   rel="noopener" class="ext-link">
+                            {label: 'GitHub', href: 'https://github.com/tkovachka'},
+                            {label: 'LinkedIn', href: 'https://www.linkedin.com/in/teodora-kovachka-37692134b'},
+                            {label: 'Email', href: 'mailto:teodora.kovachka@gmail.com'},
+                        ].map(({label, href}) => (
+                                <a href={href}
+                                   target={href.startsWith('http') ? '_blank' : undefined}
+                                   rel="noopener"
+                                   class="ext-link">
                                     {label} →
                                 </a>
                         ))}
@@ -188,12 +146,14 @@ const tooling = [
 
     </div>
 
-    <Footer slot="footer" />
+    <Footer slot="footer"/>
 </BaseLayout>
 
 <style>
     /* ── Page header ─────────────────────── */
-    .page-header { margin-bottom: 4rem; }
+    .page-header {
+        margin-bottom: 4rem;
+    }
 
     .header-grid {
         display: grid;
@@ -203,11 +163,13 @@ const tooling = [
         padding-bottom: 2rem;
         border-bottom: 1px solid #E8E8E8;
     }
-    @media (max-width: 640px) {
-        .header-grid { grid-template-columns: 1fr; gap: 2rem; }
-    }
 
-    .header-left { flex-shrink: 0; }
+    @media (max-width: 640px) {
+        .header-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
 
     .section-label {
         font-family: 'DM Sans', sans-serif;
@@ -228,7 +190,11 @@ const tooling = [
         margin: 0;
         white-space: nowrap;
     }
-    .page-title em { font-style: italic; color: var(--burgundy); }
+
+    .page-title em {
+        font-style: italic;
+        color: var(--burgundy);
+    }
 
     /* ── Agenda ──────────────────────────── */
     .agenda {
@@ -240,6 +206,7 @@ const tooling = [
         align-content: start;
         padding-top: 1.85rem;
     }
+
     @media (max-width: 640px) {
         .agenda {
             height: auto;
@@ -259,12 +226,16 @@ const tooling = [
         transition: border-color 0.2s, background 0.2s;
         width: fit-content;
     }
+
     .agenda-item:hover {
         border-color: var(--burgundy);
         background: var(--burgundy-pale);
     }
+
     .agenda-item:hover .agenda-index,
-    .agenda-item:hover .agenda-label { color: var(--burgundy); }
+    .agenda-item:hover .agenda-label {
+        color: var(--burgundy);
+    }
 
     .agenda-index {
         font-family: 'JetBrains Mono', monospace;
@@ -283,7 +254,7 @@ const tooling = [
         transition: color 0.2s;
     }
 
-    /* ── Body grid — 2/3 + 1/3, matching [slug].astro ── */
+    /* ── Body grid ───────────────────────── */
     .about-body {
         display: grid;
         grid-template-columns: 2fr 1fr;
@@ -291,18 +262,24 @@ const tooling = [
         align-items: start;
         margin-bottom: 4rem;
     }
+
     @media (max-width: 768px) {
-        .about-body { grid-template-columns: 1fr; gap: 3rem; }
+        .about-body {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
     }
 
     /* ── Bio sections ────────────────────── */
     .bio-section {
         margin-bottom: 3.5rem;
         padding-top: 1rem;
-        /* offset for sticky nav when scrolling to anchor */
         scroll-margin-top: 6rem;
     }
-    .bio-section:last-child { margin-bottom: 0; }
+
+    .bio-section:last-child {
+        margin-bottom: 0;
+    }
 
     .bio-section-label {
         font-family: 'JetBrains Mono', monospace;
@@ -321,25 +298,48 @@ const tooling = [
         margin-bottom: 1.1rem;
     }
 
-    .bio-lead {
-        font-family: 'DM Sans', sans-serif;
-        font-size: 1.1rem;
-        font-weight: 500;
-        line-height: 1.75;
-        color: #0D0D0D;
-        margin-bottom: 1.25rem;
-    }
-
-    .bio-text {
+    /* Prose rendered from Markdown */
+    .bio-prose {
         font-family: 'DM Sans', sans-serif;
         font-size: 1rem;
         line-height: 1.85;
         color: #444;
+    }
+
+    .bio-prose :global(p) {
+        text-indent: 2em;
         margin-bottom: 1.1rem;
     }
-    .bio-text:last-child { margin-bottom: 0; }
 
-    /* ── Sidebar — matches [slug].astro exactly ── */
+    .bio-prose :global(p:last-child) {
+        margin-bottom: 0;
+    }
+
+    .bio-prose :global(strong) {
+        color: #0D0D0D;
+        font-weight: 600;
+    }
+
+    .bio-prose :global(em) {
+        font-style: italic;
+    }
+
+    .bio-prose :global(a) {
+        color: var(--burgundy);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+
+    /* First paragraph of first section gets the larger lead treatment */
+    .bio-section .bio-prose :global(p:first-child) {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #0D0D0D;
+        line-height: 1.75;
+        text-indent: 0;
+    }
+
+    /* ── Sidebar ─────────────────────────── */
     .sidebar {
         border-left: 2px solid var(--burgundy);
         padding-left: 1.75rem;
@@ -347,7 +347,9 @@ const tooling = [
         top: 6rem;
     }
 
-    .sidebar-block { margin-bottom: 2rem; }
+    .sidebar-block {
+        margin-bottom: 2rem;
+    }
 
     .sidebar-label {
         font-family: 'DM Sans', sans-serif;
@@ -374,7 +376,6 @@ const tooling = [
         color: #333;
     }
 
-    /* ── Tags — identical to ProjectCard / [slug].astro ── */
     .tag-row {
         display: flex;
         flex-wrap: wrap;
@@ -389,7 +390,6 @@ const tooling = [
         padding: 0.2rem 0.5rem;
     }
 
-    /* ── Links ───────────────────────────── */
     .link-col {
         display: flex;
         flex-direction: column;
@@ -408,7 +408,11 @@ const tooling = [
         padding-bottom: 1px;
         transition: color 0.2s, border-color 0.2s;
     }
-    .ext-link:hover { color: var(--burgundy); border-color: var(--burgundy); }
+
+    .ext-link:hover {
+        color: var(--burgundy);
+        border-color: var(--burgundy);
+    }
 
     /* ── Footer nav ──────────────────────── */
     .page-footer-nav {
@@ -428,5 +432,9 @@ const tooling = [
         padding-bottom: 2px;
         transition: color 0.2s, border-color 0.2s;
     }
-    .footer-cta:hover { color: var(--burgundy); border-color: var(--burgundy); }
+
+    .footer-cta:hover {
+        color: var(--burgundy);
+        border-color: var(--burgundy);
+    }
 </style>
