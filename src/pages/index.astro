@@ -29,8 +29,8 @@ const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
       <div class="hero-rule"></div>
       <!-- todo personalize -->
       <p class="hero-bio">
-        I build thoughtful software and write about the craft.
-        Currently working on <strong>interesting things</strong>.
+        I build software that brings me joy and write about it.
+        Currently working on <strong>moving a couple apps to production</strong>.
       </p>
 
       <div class="hero-actions">
@@ -45,7 +45,8 @@ const cleanId = (id: string) => id.replace(/\.mdx?$/, '');
           class="hero-photo"
           width="420"
           height="560"
-          loading="lazy"
+          loading="eager"
+          fetchpriority="high"
           decoding="async"
           onload="this.closest('.hero-photo-wrap').classList.add('loaded')"
       />

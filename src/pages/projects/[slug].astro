@@ -4,6 +4,8 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import {getCollection, render} from 'astro:content';
 import type {CollectionEntry} from 'astro:content';
+import { media } from '../../config/media';
+
 
 interface Props {
     project: CollectionEntry<'projects'>;
@@ -50,9 +52,37 @@ function formatDate(ym: string) {
             <div class="sm:col-span-2">
                 <h1 class="project-title">{project.data.title}</h1>
                 <p class="project-desc">{project.data.description}</p>
+                
+                {project.data.thumbnail && (
+                    <img
+                        src={media(project.data.thumbnail)}
+                        alt={`${project.data.title} thumbnail`}
+                        class="project-thumbnail"
+                        loading="eager"
+                        fetchpriority="high"
+                    />
+                )}
+
                 <div class="prose-content">
                     <Content/>
                 </div>
+
+                {project.data.screenshots && project.data.screenshots.length > 0 && (
+                    <div class="project-screenshots">
+                        <h3 class="screenshots-title">Gallery</h3>
+                        <div class="screenshots-grid mt-6">
+                            {project.data.screenshots.map((file) => {
+                                const src = media(file);
+
+                                return file.endsWith('.mp4') ? (
+                                    <video src={src} class="screenshot-img" controls autoplay loop muted playsinline />
+                                ) : (
+                                    <img src={src} class="screenshot-img" loading="lazy" decoding="async"/>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
             </div>
 
             <!-- Sidebar -->
@@ -69,7 +99,7 @@ function formatDate(ym: string) {
                     <p class="meta-label">Timeline</p>
                     <p class="meta-value">
                         {formatDate(project.data.startDate)}
-                        {project.data.endDate ? ` — ${formatDate(project.data.endDate)}` : ' — Present'}
+                        {project.data.endDate ? " — " + formatDate(project.data.endDate) : " — Present"}
                     </p>
                 </div>
 
@@ -111,7 +141,103 @@ function formatDate(ym: string) {
     </article>
 
     <Footer slot="footer"/>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox">
+        <button class="lightbox-close" id="lb-close">&times;</button>
+        <button class="lightbox-nav nav-prev" id="lb-prev" style="display: none;">&#10094;</button>
+        <div class="lightbox-content-wrapper" id="lb-wrapper">
+            <!-- Media injected here -->
+        </div>
+        <button class="lightbox-nav nav-next" id="lb-next" style="display: none;">&#10095;</button>
+    </div>
 </BaseLayout>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const lightbox = document.getElementById('lightbox');
+        const lbClose = document.getElementById('lb-close');
+        const lbPrev = document.getElementById('lb-prev');
+        const lbNext = document.getElementById('lb-next');
+        const lbWrapper = document.getElementById('lb-wrapper');
+        
+        let mediaItems = Array.from(document.querySelectorAll('.screenshot-img'));
+        let currentIndex = -1;
+
+        if (!lightbox) return;
+
+        function showLightbox(index) {
+            currentIndex = index;
+            lightbox.classList.add('show');
+            document.body.style.overflow = 'hidden';
+
+            const sourceMedia = mediaItems[index];
+
+            // Clear previous content
+            lbWrapper.innerHTML = '';
+            
+            if (sourceMedia.tagName === 'VIDEO') {
+                const vid = document.createElement('video');
+                vid.src = sourceMedia.src;
+                vid.controls = true;
+                vid.autoplay = true;
+                vid.className = 'lightbox-media';
+                lbWrapper.appendChild(vid);
+            } else {
+                const img = document.createElement('img');
+                img.src = sourceMedia.src;
+                img.className = 'lightbox-media';
+                lbWrapper.appendChild(img);
+            }
+
+            lbPrev.style.display = mediaItems.length > 1 ? 'block' : 'none';
+            lbNext.style.display = mediaItems.length > 1 ? 'block' : 'none';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('show');
+            document.body.style.overflow = '';
+            lbWrapper.innerHTML = '';
+        }
+
+        function prevMedia() {
+            if (mediaItems.length <= 1) return;
+            let nextIdx = currentIndex - 1;
+            if (nextIdx < 0) nextIdx = mediaItems.length - 1;
+            showLightbox(nextIdx);
+        }
+
+        function nextMedia() {
+            if (mediaItems.length <= 1) return;
+            let nextIdx = currentIndex + 1;
+            if (nextIdx >= mediaItems.length) nextIdx = 0;
+            showLightbox(nextIdx);
+        }
+
+        mediaItems.forEach((media, idx) => {
+            media.addEventListener('click', () => showLightbox(idx));
+        });
+
+        lbClose.addEventListener('click', closeLightbox);
+        lbPrev.addEventListener('click', prevMedia);
+        lbNext.addEventListener('click', nextMedia);
+
+        // Click outside closes
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                closeLightbox();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('show')) return;
+            if (e.key === 'Escape') closeLightbox();
+            if (e.key === 'ArrowLeft') prevMedia();
+            if (e.key === 'ArrowRight') nextMedia();
+        });
+    });
+</script>
 
 <style>
     /* ── Back link ──────────────────────── */
@@ -228,15 +354,164 @@ function formatDate(ym: string) {
         border-color: var(--burgundy);
     }
 
+    /* ── Image Styles ───────────────────── */
+    .project-thumbnail {
+        height: 400px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: 6px;
+        margin-bottom: 2.5rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        border: 1px solid #EAEAEA;
+    }
+
+    .project-screenshots {
+        margin-top: 3.5rem;
+        border-top: 1px solid #EAEAEA;
+        padding-top: 2rem;
+    }
+
+    .screenshots-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #0D0D0D;
+        margin-bottom: 1.5rem;
+    }
+
+    .screenshots-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+    }
+
+    .screenshot-img {
+        flex-grow: 1;
+        height: 250px;
+        width: auto;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        border: 1px solid #EAEAEA;
+        transition: transform 0.2s;
+        cursor: zoom-in;
+    }
+
+    .screenshot-img:hover {
+        transform: translateY(-2px);
+    }
+
+    /* ── Lightbox Styles ────────────────── */
+    #lightbox {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s;
+    }
+    #lightbox.show {
+        display: flex;
+        opacity: 1;
+    }
+    .lightbox-content-wrapper {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        padding: 5vh 5vw; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    :global(.lightbox-media) {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain; 
+        border-radius: 4px;
+        box-shadow: 0 4px 30px rgba(0,0,0,0.5);
+    }
+    .lightbox-close {
+        position: fixed;
+        top: 1.5rem;
+        right: 2rem;
+        background: none;
+        border: none;
+        color: white;
+        font-size: 3rem;
+        cursor: pointer;
+        line-height: 1;
+        z-index: 10000;
+        opacity: 0.7;
+    }
+    .lightbox-close:hover { opacity: 1; }
+
+    .lightbox-nav {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(255,255,255,0.1);
+        border: none;
+        color: white;
+        font-size: 2rem;
+        padding: 1rem 1rem;
+        cursor: pointer;
+        border-radius: 4px;
+        z-index: 10000;
+        opacity: 0.7;
+    }
+    .lightbox-nav:hover { opacity: 1; background: rgba(255,255,255,0.2); }
+    .nav-prev { left: 1rem; }
+    .nav-next { right: 1rem; }
+
     /* ── Prose body ─────────────────────── */
     .prose-content {
         font-family: 'DM Sans', sans-serif;
         font-size: 1rem;
         line-height: 1.85;
-        color: #222;
+        color: #444; /* Matches about.astro */
     }
 
-    .prose-content h2 {
+    .prose-content :global(p) {
+        text-indent: 2em; /* Matches about.astro */
+        margin-bottom: 1.1rem; /* Matches about.astro */
+    }
+
+    .prose-content :global(p:last-child) {
+        margin-bottom: 0;
+    }
+
+    .prose-content :global(p:first-child) {
+        font-size: 1.1rem;
+        font-weight: 500;
+        color: #0D0D0D;
+        line-height: 1.75;
+        text-indent: 0;
+    }
+
+    .prose-content :global(strong) {
+        color: #0D0D0D;
+        font-weight: 600;
+    }
+
+    .prose-content :global(em) {
+        font-style: italic;
+    }
+
+    .prose-content :global(a) {
+        color: var(--burgundy);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+        font-weight: 500;
+    }
+
+    .prose-content :global(h2) {
         font-family: 'Playfair Display', serif;
         font-size: 1.6rem;
         font-weight: 700;
@@ -245,7 +520,7 @@ function formatDate(ym: string) {
         margin-bottom: 0.75rem;
     }
 
-    .prose-content h3 {
+    .prose-content :global(h3) {
         font-family: 'Playfair Display', serif;
         font-size: 1.2rem;
         font-weight: 600;
@@ -254,34 +529,23 @@ function formatDate(ym: string) {
         margin-bottom: 0.5rem;
     }
 
-    .prose-content p {
-        margin-bottom: 1.25rem;
-    }
-
-    .prose-content ul {
+    .prose-content :global(ul) {
         list-style: disc;
         padding-left: 1.5rem;
         margin-bottom: 1.25rem;
     }
 
-    .prose-content ol {
+    .prose-content :global(ol) {
         list-style: decimal;
         padding-left: 1.5rem;
         margin-bottom: 1.25rem;
     }
 
-    .prose-content li {
+    .prose-content :global(li) {
         margin-bottom: 0.4rem;
     }
 
-    .prose-content a {
-        color: var(--burgundy);
-        text-decoration: underline;
-        text-underline-offset: 3px;
-        font-weight: 500;
-    }
-
-    .prose-content code {
+    .prose-content :global(code) {
         font-family: 'JetBrains Mono', monospace;
         font-size: 0.83em;
         background: #F2F2F2;
@@ -290,7 +554,7 @@ function formatDate(ym: string) {
         border-radius: 2px;
     }
 
-    .prose-content pre {
+    .prose-content :global(pre) {
         background: #0D0D0D;
         color: #F0EDE8;
         padding: 1.25rem;
@@ -298,13 +562,13 @@ function formatDate(ym: string) {
         margin-bottom: 1.5rem;
     }
 
-    .prose-content pre code {
+    .prose-content :global(pre code) {
         background: none;
         color: inherit;
         padding: 0;
     }
 
-    .prose-content blockquote {
+    .prose-content :global(blockquote) {
         border-left: 3px solid var(--burgundy);
         padding-left: 1.25rem;
         color: #555;

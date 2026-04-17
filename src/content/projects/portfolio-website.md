@@ -29,8 +29,10 @@ creating a new `.md` file, committing, and pushing.
 - **Content Collections** provide compile-time validation of frontmatter via Zod schemas
 - **GitHub Actions** automate the build and deploy pipeline on every push to `main`
 - **Tailwind CSS** with a custom design system keeps styling consistent without a UI library
+- **GitHub Pages** hosts the site for free
+- **GitHub Releases** hosts the media (images/videos) so source code stays clean. Then media is plugged into the markdown files via links.
 
 ## Why I like this project
 
-AI Agents can develop everything I tell them to. But when I ask them to write something about myself - 
+AI Agents can develop everything I tell them to. But when I ask them to write something about myself -
 they can never me quite right. So, Claude Sonnet 4.6 built the house, but it was me who gave it its soul.
